@@ -7,7 +7,7 @@
     <title>Demo Page</title>
   </head>
   <body>
-    <input type="file" title="" name="myfiles" id="file" class="" />
+    <button id="testBtn">点击上传</button>
     <script>
       // function handleFile() {
       //   var fileInputs = document.querySelector("input[name='myfiles']") //获取input里的文件信息
@@ -19,6 +19,43 @@
       //     shardCount = Math.ceil(size / shardSize) //总片数
       //   console.log(name, size, type, shardSize, shardCount)
       // }
+
+      // function strToArr1(str, sep) {
+      //   let arr1 = Array.apply(null, new Array(str.length)).map(
+      //     (item, index) => index
+      //   )
+      //   let temp = ''
+      //   let arr = arr1.reduce((prev, current, index) => {
+      //     let char = str.substr(index, 1)
+      //     if (char === sep) {
+      //       prev.push(temp)
+      //       temp = ''
+      //     } else {
+      //       temp += char
+      //     }
+      //     return prev
+      //   }, [])
+      //   return arr
+      // }
+
+      // function strToArr2(str, reg) {
+      //   let arr = [],
+      //     start = 0,
+      //     ret = null
+      //   do {
+      //     ret = reg.exec(str)
+      //     if (ret !== null) {
+      //       arr.push(str.substring(start, ret.index))
+      //       start = ret.index + 1
+      //     }
+      //   } while (ret !== null)
+      //   return arr
+      // }
+      // let str = '1 2 3 45 6 7'
+      // let sep = ' '
+      // let reg = /\s/g
+      // console.log(strToArr1(str, sep))
+      // console.log(strToArr2(str, reg))
     </script>
   </body>
 </html>

@@ -7,7 +7,7 @@ const config = {
     port: 2333,
     open: true,
     hot: true,
-    index:'demo/index.html',
+    index: 'demo/index.html',
     overlay: {
       errors: true,
       warnings: true

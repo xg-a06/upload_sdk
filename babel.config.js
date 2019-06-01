@@ -9,6 +9,7 @@ const presets = [
 ]
 const plugins = [
   ['@babel/plugin-transform-runtime', { corejs: 2 }],
+  '@babel/plugin-proposal-export-default-from',
   ['@babel/plugin-proposal-decorators', { legacy: true }], // Stage 2
   '@babel/plugin-proposal-function-sent',
   '@babel/plugin-proposal-export-namespace-from',
@@ -18,7 +19,6 @@ const plugins = [
   '@babel/plugin-syntax-import-meta',
   ['@babel/plugin-proposal-class-properties', { loose: false }],
   '@babel/plugin-proposal-json-strings',
-  '@babel/plugin-proposal-object-rest-spread',
-  
+  '@babel/plugin-proposal-object-rest-spread'
 ]
 module.exports = { presets, plugins }

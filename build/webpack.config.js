@@ -22,7 +22,7 @@ const baseConfig = {
   devtool: isProd ? '' : 'cheap-module-eval-source-map',
   entry: {
     sdk: resolve('src/sdk.js'),
-    'demo/test': resolve('src/test/index.js')
+    'demo/test': resolve('demo/index.js')
   },
   output: {
     filename: '[name].js',
@@ -50,7 +50,7 @@ const baseConfig = {
     new HtmlWebpackPlugin({
       template: resolve('demo/index.html'),
       filename: 'demo/index.html',
-      inject: 'head',
+      inject: 'body',
       minify: true,
       chunks: ['demo/test']
     }),
