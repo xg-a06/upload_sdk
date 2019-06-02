@@ -2,7 +2,7 @@
  * @Description: 上传类
  * @Author: xg-a06
  * @Date: 2019-05-23 00:04:31
- * @LastEditTime: 2019-06-02 02:08:47
+ * @LastEditTime: 2019-06-03 01:02:36
  * @LastEditors: xg-a06
  */
 
@@ -28,7 +28,8 @@ let defaultOptions = {
   },
   accepts: [],
   name: 'file',
-  multiple: false
+  multiple: false,
+  resume: true
 }
 
 class UploadSDK extends EventEmitter {
@@ -100,18 +101,20 @@ class UploadSDK extends EventEmitter {
   addTask (file) {
     let task = new Task(file, this)
     this.tasks.push(task)
-    this.emit('addTask', {
-      id: task.id,
-      name: file.name,
-      size: file.size,
-      type: mime.getType(file.name)
-    })
   }
   removeTask (taskId) {
     let index = this.tasks.findIndex(task => task.id === taskId)
     if (index !== -1) {
       this.tasks.splice(index, 1)
     }
+  }
+  pauseTask (tid) {
+    let task = this.tasks.find(task => task.id === tid)
+    task.pause()
+  }
+  resumeTask (tid) {
+    let task = this.tasks.find(task => task.id === tid)
+    task.resume()
   }
 }
 

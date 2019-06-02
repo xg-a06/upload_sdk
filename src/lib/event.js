@@ -2,12 +2,10 @@
  * @Description: 事件类
  * @Author: xg-a06
  * @Date: 2019-06-01 00:07:20
- * @LastEditTime: 2019-06-01 09:09:36
+ * @LastEditTime: 2019-06-02 23:51:42
  * @LastEditors: xg-a06
  */
-
 const eventMap = Symbol('eventMap')
-
 class EventEmitter {
   constructor () {
     this[eventMap] = new Map()
