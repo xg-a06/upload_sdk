@@ -1,8 +1,8 @@
 {
   "name": "a06-upload-sdk",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "a upload jssdk support resume",
-  "main": "dist/1.0.4/prod/sdk.js",
+  "main": "dist/1.0.5/prod/sdk.js",
   "files": [
     "README.md",
     "package.json",
