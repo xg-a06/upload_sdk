@@ -2,7 +2,7 @@
  * @Description: 测试文件
  * @Author: xg-a06
  * @Date: 2019-05-23 00:04:31
- * @LastEditTime: 2019-06-03 15:44:50
+ * @LastEditTime: 2019-06-03 15:54:07
  * @LastEditors: xg-a06
  */
 import UploadSdk from '@/sdk'
@@ -88,7 +88,6 @@ sdk.on('progress', function (data) {
   let spanLoaded = $(`#${data.id} .demo_table_loaded`)
   spanPercent.innerText = data.percent
   spanLoaded.innerText = calculateSize(data.loaded)
-  // console.log('progress', data)
 })
 sdk.on('complete', function (data) {
   let btn = $(`#${data.id} .demo_table_optBtn`)

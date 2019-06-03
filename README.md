@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: xg-a06
  * @Date: 2019-06-03 15:00:22
- * @LastEditTime: 2019-06-03 15:52:41
+ * @LastEditTime: 2019-06-03 15:56:46
  * @LastEditors: xg-a06
  -->
 # a06-upload-sdk 上传sdk
@@ -78,9 +78,18 @@ const sdk = new UploadSdk({
   }
 })
 
+//调用选择文件
+sdk.select()
+//暂停指定上传任务
+sdk.pauseTask(tid)
+//恢复指定上传任务
+sdk.resumeTask(tid)
+//删除指定上传任务
+sdk.removeTask(tid)
+
 //添加任务事件,会在beforeHook执行过后,上传开始之前触发
 sdk.on('addTask', function (data) {
-  console.log('error', data)
+  console.log('addTask', data)
   // {
   //   ext: "png"
   //   hash: "2f1e861d563b5782f9dcd23ac8b98a38"
@@ -94,7 +103,7 @@ sdk.on('addTask', function (data) {
 })
 //上传进度事件
 sdk.on('progress', function (data) {
-  console.log('error', data)
+  console.log('progress', data)
   // {
   //   ext: "png"
   //   hash: "2f1e861d563b5782f9dcd23ac8b98a38"
@@ -110,7 +119,7 @@ sdk.on('progress', function (data) {
 })
 //上传完毕事件
 sdk.on('complete', function (data) {
-  console.log('error', data)
+  console.log('complete', data)
   // {
   //   ext: 'png'
   //   hash: null
@@ -129,7 +138,7 @@ sdk.on('error', function (err) {
 ```
 
 ## 帮助
-<a name="第一段的锚点名称">第一段标题</a>
+
 该sdk编写了配套的服务端demo(nodejs实现),方便你使用此sdk进行本地实验.,[github地址](https://github.com/xg-a06/upload_sdk_demo_server)
 
 ## License
