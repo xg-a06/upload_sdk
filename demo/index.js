@@ -2,7 +2,7 @@
  * @Description: 测试文件
  * @Author: xg-a06
  * @Date: 2019-05-23 00:04:31
- * @LastEditTime: 2019-06-03 16:18:23
+ * @LastEditTime: 2019-06-04 00:42:43
  * @LastEditors: xg-a06
  */
 import UploadSdk from '@/sdk'
@@ -49,7 +49,6 @@ window.removeBtn = tid => {
 const sdk = new UploadSdk({
   uploadUrl: 'http://127.0.0.1:8768/upload',
   multiple: true,
-  resume: true,
   beforeHook (params, next) {
     let { hash } = params
     http({

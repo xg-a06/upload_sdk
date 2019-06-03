@@ -2,7 +2,7 @@
  * @Description: 上传类
  * @Author: xg-a06
  * @Date: 2019-05-23 00:04:31
- * @LastEditTime: 2019-06-03 14:52:54
+ * @LastEditTime: 2019-06-04 00:41:42
  * @LastEditors: xg-a06
  */
 
@@ -29,7 +29,7 @@ let defaultOptions = {
   accepts: [],
   name: 'file',
   multiple: false,
-  resume: false
+  resume: true
 }
 
 class UploadSDK extends EventEmitter {

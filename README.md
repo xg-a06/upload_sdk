@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: xg-a06
  * @Date: 2019-06-03 15:00:22
- * @LastEditTime: 2019-06-03 16:27:47
+ * @LastEditTime: 2019-06-04 00:43:30
  * @LastEditors: xg-a06
  -->
 
@@ -72,7 +72,7 @@ const sdk = new UploadSdk({
   },
   //input file的name值,默认file
   name: 'file',
-  //是否开始断点续传,默认false
+  //是否开始断点续传,默认true
   resume: true,
   //自定义参数,你的业务字段,如鉴权等,这些参数会在调用upload接口的时候一起传上去
   exParams: {

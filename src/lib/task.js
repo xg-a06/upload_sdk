@@ -3,7 +3,7 @@
  * @Description: 子任务类
  * @Author: xg-a06
  * @Date: 2019-06-01 07:10:33
- * @LastEditTime: 2019-06-03 16:17:03
+ * @LastEditTime: 2019-06-04 00:36:59
  * @LastEditors: xg-a06
  */
 
@@ -27,8 +27,6 @@ class Task {
     this.mimeType = file.type || mime.getType(file.name)
     this.ext = file.name.substring(file.name.lastIndexOf('.') + 1)
     this.size = file.size
-    this.chunks = []
-    this.fileReader = new FileReader()
     this.currentChunkIndex = 0
     this.chunkCount = 0
     this.retryTime = 0
@@ -48,9 +46,10 @@ class Task {
     }
   }
   [split] () {
-    let spark = new SparkMD5.ArrayBuffer()
     return new Promise((resolve, reject) => {
-      let { file, chunks, fileReader } = this
+      let { file } = this
+      let spark = new SparkMD5.ArrayBuffer()
+      let fileReader = new FileReader()
       this.splitSize = file.size
       if (this.ctx.opts.resume) {
         this.splitSize = SPLIT_SIZE
@@ -58,11 +57,10 @@ class Task {
       this.chunkCount = Math.ceil(file.size / this.splitSize)
       fileReader.onload = e => {
         let chunk = e.target.result
-        chunks.push(chunk)
         spark.append(chunk)
         this.currentChunkIndex++
         if (this.currentChunkIndex < this.chunkCount) {
-          this[readNext]()
+          this[readNext](fileReader)
         } else {
           this.hash = spark.end()
           this.currentChunkIndex = 0
@@ -72,11 +70,11 @@ class Task {
       fileReader.onerror = error => {
         reject(error)
       }
-      this[readNext]()
+      this[readNext](fileReader)
     })
   }
-  [readNext] () {
-    let { currentChunkIndex, file, fileReader, splitSize } = this
+  [readNext] (fileReader) {
+    let { currentChunkIndex, file, splitSize } = this
     let start = currentChunkIndex * splitSize
     let end = start + splitSize >= file.size ? file.size : start + splitSize
     fileReader.readAsArrayBuffer(blobSlice.call(file, start, end))
@@ -102,6 +100,7 @@ class Task {
     if (end > this.file.size) {
       end = this.file.size
     }
+    let chunk = this.file.slice(start, end)
     let params = {
       url: uploadUrl,
       data: {
@@ -112,7 +111,7 @@ class Task {
         hash: this.hash,
         name: `${this.name + this.hash}`,
         ext: this.ext,
-        [name]: new Blob([this.chunks[this.currentChunkIndex]]),
+        [name]: chunk,
         ...exParams
       }
     }
@@ -181,9 +180,12 @@ class Task {
       }
     }
     xhr.send(formData)
+    formData = null
   }
   complete () {
     this.ctx.emit('complete', this.baseInfo)
+    this.xhr = null
+    this.ctx.removeTask(this.id)
   }
 }
 
