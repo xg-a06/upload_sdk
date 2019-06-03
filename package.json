@@ -2,7 +2,7 @@
   "name": "a06-upload-sdk",
   "version": "1.0.0",
   "description": "a upload jssdk support resume",
-  "main": "src/sdk.js",
+  "main": "dist/1.0.0/prod/sdk.js",
   "scripts": {
     "start": "cross-env NODE_ENV=local BUILD_ENV=local webpack-dev-server --config build/webpack.config.js",
     "build:dev": "cross-env NODE_ENV=development BUILD_ENV=dev node build/build.js",

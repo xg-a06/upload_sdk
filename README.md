@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: xg-a06
  * @Date: 2019-06-03 15:00:22
- * @LastEditTime: 2019-06-03 15:56:46
+ * @LastEditTime: 2019-06-03 16:20:49
  * @LastEditors: xg-a06
  -->
 # a06-upload-sdk 上传sdk
@@ -22,6 +22,8 @@ npm install a06-upload-sdk
 ```sh
 //global
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+const upload = new sdk({})
+
 
 commonjs
 const UploadSdk = require('@/sdk').default

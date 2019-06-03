@@ -1,3 +1,10 @@
+/*
+ * @Description:
+ * @Author: xg-a06
+ * @Date: 2019-05-23 00:04:31
+ * @LastEditTime: 2019-06-03 16:08:09
+ * @LastEditors: xg-a06
+ */
 const path = require('path')
 const webpack = require('webpack')
 const merge = require('webpack-merge')
@@ -42,7 +49,7 @@ const baseConfig = {
       {
         test: /\.js?$/,
         loader: 'happypack/loader?id=happy-babel',
-        include: resolve('src')
+        include: [resolve('src'), resolve('demo')]
       }
     ]
   },

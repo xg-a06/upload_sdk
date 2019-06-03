@@ -3,7 +3,7 @@
  * @Description: 子任务类
  * @Author: xg-a06
  * @Date: 2019-06-01 07:10:33
- * @LastEditTime: 2019-06-03 15:43:59
+ * @LastEditTime: 2019-06-03 16:17:03
  * @LastEditors: xg-a06
  */
 
@@ -51,35 +51,34 @@ class Task {
     let spark = new SparkMD5.ArrayBuffer()
     return new Promise((resolve, reject) => {
       let { file, chunks, fileReader } = this
+      this.splitSize = file.size
       if (this.ctx.opts.resume) {
-        this.chunkCount = Math.ceil(file.size / SPLIT_SIZE)
-        fileReader.onload = e => {
-          let chunk = e.target.result
-          chunks.push(chunk)
-          spark.append(chunk)
-          this.currentChunkIndex++
-          if (this.currentChunkIndex < this.chunkCount) {
-            this[readNext]()
-          } else {
-            this.hash = spark.end()
-            this.currentChunkIndex = 0
-            resolve()
-          }
-        }
-        fileReader.onerror = error => {
-          reject(error)
-        }
-        this[readNext]()
-      } else {
-        chunks.push(this.file)
-        resolve()
+        this.splitSize = SPLIT_SIZE
       }
+      this.chunkCount = Math.ceil(file.size / this.splitSize)
+      fileReader.onload = e => {
+        let chunk = e.target.result
+        chunks.push(chunk)
+        spark.append(chunk)
+        this.currentChunkIndex++
+        if (this.currentChunkIndex < this.chunkCount) {
+          this[readNext]()
+        } else {
+          this.hash = spark.end()
+          this.currentChunkIndex = 0
+          resolve()
+        }
+      }
+      fileReader.onerror = error => {
+        reject(error)
+      }
+      this[readNext]()
     })
   }
   [readNext] () {
-    let { currentChunkIndex, file, fileReader } = this
-    let start = currentChunkIndex * SPLIT_SIZE
-    let end = start + SPLIT_SIZE >= file.size ? file.size : start + SPLIT_SIZE
+    let { currentChunkIndex, file, fileReader, splitSize } = this
+    let start = currentChunkIndex * splitSize
+    let end = start + splitSize >= file.size ? file.size : start + splitSize
     fileReader.readAsArrayBuffer(blobSlice.call(file, start, end))
   }
   [init] () {
@@ -97,8 +96,9 @@ class Task {
   }
   startUpload () {
     let { uploadUrl, name, exParams } = this.ctx.opts
-    let start = this.currentChunkIndex * SPLIT_SIZE
-    let end = start + SPLIT_SIZE
+    let splitSize = this.splitSize
+    let start = this.currentChunkIndex * splitSize
+    let end = start + splitSize
     if (end > this.file.size) {
       end = this.file.size
     }
@@ -139,9 +139,7 @@ class Task {
       if (xhr.status >= 200 && xhr.status < 400) {
         this.currentChunkIndex++
         if (this.currentChunkIndex <= this.chunkCount - 1) {
-          setTimeout(() => {
-            !this.pauseState && this.startUpload()
-          }, 1000)
+          !this.pauseState && this.startUpload()
         } else {
           this.complete()
         }

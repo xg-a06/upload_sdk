@@ -2,7 +2,7 @@
  * @Description: 测试文件
  * @Author: xg-a06
  * @Date: 2019-05-23 00:04:31
- * @LastEditTime: 2019-06-03 15:54:07
+ * @LastEditTime: 2019-06-03 16:18:23
  * @LastEditors: xg-a06
  */
 import UploadSdk from '@/sdk'
@@ -49,23 +49,20 @@ window.removeBtn = tid => {
 const sdk = new UploadSdk({
   uploadUrl: 'http://127.0.0.1:8768/upload',
   multiple: true,
+  resume: true,
   beforeHook (params, next) {
     let { hash } = params
-    if (hash) {
-      http({
-        url: `http://127.0.0.1:8768/upload/${hash}`
+    http({
+      url: `http://127.0.0.1:8768/upload/${hash}`
+    })
+      .then(res => {
+        if (!res.complete) {
+          next(res.index)
+        } else {
+          console.log('已经上传过')
+        }
       })
-        .then(res => {
-          if (!res.complete) {
-            next(res.index)
-          } else {
-            console.log('已经上传过')
-          }
-        })
-        .catch(err => console.log(err))
-    } else {
-      next()
-    }
+      .catch(err => console.log(err))
   }
 })
 
