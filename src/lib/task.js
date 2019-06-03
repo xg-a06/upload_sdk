@@ -3,7 +3,7 @@
  * @Description: 子任务类
  * @Author: xg-a06
  * @Date: 2019-06-01 07:10:33
- * @LastEditTime: 2019-06-03 01:11:06
+ * @LastEditTime: 2019-06-03 15:43:59
  * @LastEditors: xg-a06
  */
 
@@ -28,7 +28,6 @@ class Task {
     this.ext = file.name.substring(file.name.lastIndexOf('.') + 1)
     this.size = file.size
     this.chunks = []
-    this.spark = new SparkMD5.ArrayBuffer()
     this.fileReader = new FileReader()
     this.currentChunkIndex = 0
     this.chunkCount = 0
@@ -49,8 +48,9 @@ class Task {
     }
   }
   [split] () {
+    let spark = new SparkMD5.ArrayBuffer()
     return new Promise((resolve, reject) => {
-      let { file, chunks, spark, fileReader } = this
+      let { file, chunks, fileReader } = this
       if (this.ctx.opts.resume) {
         this.chunkCount = Math.ceil(file.size / SPLIT_SIZE)
         fileReader.onload = e => {
@@ -85,16 +85,11 @@ class Task {
   [init] () {
     this[split]()
       .then(() => {
-        this.ctx.opts.beforeHook(
-          {
-            hash: this.hash
-          },
-          index => {
-            this.ctx.emit('addTask', this.baseInfo)
-            this.currentChunkIndex = index || 0
-            this.startUpload()
-          }
-        )
+        this.ctx.opts.beforeHook(this.baseInfo, index => {
+          this.ctx.emit('addTask', this.baseInfo)
+          this.currentChunkIndex = index || 0
+          this.startUpload()
+        })
       })
       .catch(error => {
         this.ctx.exception(error)
@@ -113,9 +108,10 @@ class Task {
         index: this.currentChunkIndex,
         start: start,
         end: end,
-        fileType: this.mimeType,
-        fileHash: this.hash,
-        filename: `${this.name + this.hash}.${this.ext}`,
+        type: this.mimeType,
+        hash: this.hash,
+        name: `${this.name + this.hash}`,
+        ext: this.ext,
         [name]: new Blob([this.chunks[this.currentChunkIndex]]),
         ...exParams
       }

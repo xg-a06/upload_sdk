@@ -1,8 +1,8 @@
 {
-  "name": "upload_sdk",
+  "name": "a06-upload-sdk",
   "version": "1.0.0",
-  "description": "a download/upload jssdk",
-  "main": "src/main.js",
+  "description": "a upload jssdk support resume",
+  "main": "src/sdk.js",
   "scripts": {
     "start": "cross-env NODE_ENV=local BUILD_ENV=local webpack-dev-server --config build/webpack.config.js",
     "build:dev": "cross-env NODE_ENV=development BUILD_ENV=dev node build/build.js",
@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xg-a06/lib_tpl.git"
+    "url": "git+https://github.com/xg-a06/upload_sdk.git"
   },
   "author": "xg_jser@163.com",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/xg-a06/lib_tpl/issues"
+    "url": "https://github.com/xg-a06/upload_sdk/issues"
   },
-  "homepage": "https://github.com/xg-a06/lib_tpl#readme",
+  "homepage": "https://github.com/xg-a06/upload_sdk#readme",
   "devDependencies": {
     "@babel/core": "^7.4.4",
     "@babel/plugin-proposal-class-properties": "^7.4.4",

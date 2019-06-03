@@ -2,7 +2,7 @@
  * @Description: 上传类
  * @Author: xg-a06
  * @Date: 2019-05-23 00:04:31
- * @LastEditTime: 2019-06-03 01:02:36
+ * @LastEditTime: 2019-06-03 14:52:54
  * @LastEditors: xg-a06
  */
 
@@ -18,18 +18,18 @@ const changeHandler = Symbol('changeHandler')
 const check = Symbol('check')
 
 let defaultOptions = {
-  exParams: {},
+  exParams: {
+    token: 'xxxxxxxxxxooooooooo',
+    test: 1
+  },
   beforeHook (params, next) {
-    next()
+    next(0)
   },
   uploadUrl: '',
-  afterHook (next) {
-    next({ index: 1 })
-  },
   accepts: [],
   name: 'file',
   multiple: false,
-  resume: true
+  resume: false
 }
 
 class UploadSDK extends EventEmitter {
@@ -105,6 +105,7 @@ class UploadSDK extends EventEmitter {
   removeTask (taskId) {
     let index = this.tasks.findIndex(task => task.id === taskId)
     if (index !== -1) {
+      this.tasks[index].pause()
       this.tasks.splice(index, 1)
     }
   }

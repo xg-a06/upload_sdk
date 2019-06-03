@@ -2,11 +2,22 @@
  * @Description: 测试文件
  * @Author: xg-a06
  * @Date: 2019-05-23 00:04:31
- * @LastEditTime: 2019-06-03 01:18:09
+ * @LastEditTime: 2019-06-03 15:44:50
  * @LastEditors: xg-a06
  */
 import UploadSdk from '@/sdk'
 import { $ } from '../src/lib/utils'
+
+function http (opts) {
+  let { method: method = 'get', url, data } = opts
+  return fetch(url, {
+    method: method,
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  }).then(res => res.json())
+}
 
 function calculateSize (size) {
   let fileSize = size / 1024
@@ -29,12 +40,34 @@ window.optBtn = tid => {
     sdk.pauseTask(tid)
   }
 }
+window.removeBtn = tid => {
+  let tr = $(`#${tid}`)
+  tr.parentNode.removeChild(tr)
+  sdk.removeTask(tid)
+}
 
-const sdk = (window.sdk = new UploadSdk({
+const sdk = new UploadSdk({
   uploadUrl: 'http://127.0.0.1:8768/upload',
-  multiple: true
-  // accepts: ['gif', 'png']
-}))
+  multiple: true,
+  beforeHook (params, next) {
+    let { hash } = params
+    if (hash) {
+      http({
+        url: `http://127.0.0.1:8768/upload/${hash}`
+      })
+        .then(res => {
+          if (!res.complete) {
+            next(res.index)
+          } else {
+            console.log('已经上传过')
+          }
+        })
+        .catch(err => console.log(err))
+    } else {
+      next()
+    }
+  }
+})
 
 sdk.on('addTask', function (data) {
   let tr = $(
@@ -44,7 +77,9 @@ sdk.on('addTask', function (data) {
       data.size
     }</td><td><span class="demo_table_percent">0.00%</span> (已上传<span class="demo_table_loaded">0</span>)</td><td><button onclick="optBtn('${
       data.id
-    }')" class="demo_table_optBtn">暂停</button></td></tr>`
+    }')" class="demo_table_optBtn">暂停</button><button class="demo_table_delBtn" onclick="removeBtn('${
+      data.id
+    }')" >删除</button></td></tr>`
   )
   $('#demo_table tbody').appendChild(tr)
 })
@@ -57,7 +92,16 @@ sdk.on('progress', function (data) {
 })
 sdk.on('complete', function (data) {
   let btn = $(`#${data.id} .demo_table_optBtn`)
+  let del = $(`#${data.id} .demo_table_delBtn`)
   btn.parentNode.removeChild(btn)
+  del.parentNode.removeChild(del)
+  http({
+    method: 'post',
+    url: `http://127.0.0.1:8768/complete`,
+    data: data
+  })
+    .then(res => {})
+    .catch(err => console.log(err))
 })
 sdk.on('error', function (err) {
   console.log('error', err)
