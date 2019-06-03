@@ -2,9 +2,10 @@
  * @Description: 
  * @Author: xg-a06
  * @Date: 2019-06-03 15:00:22
- * @LastEditTime: 2019-06-03 16:20:49
+ * @LastEditTime: 2019-06-03 16:27:47
  * @LastEditors: xg-a06
  -->
+
 # a06-upload-sdk 上传sdk
 
 js实现的上传文件sdk,支持断点续传
@@ -101,7 +102,6 @@ sdk.on('addTask', function (data) {
   //   splitCount: 0
   //   type: "image/png"
   // }
- 
 })
 //上传进度事件
 sdk.on('progress', function (data) {
